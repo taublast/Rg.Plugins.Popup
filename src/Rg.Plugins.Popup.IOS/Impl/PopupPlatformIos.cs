@@ -74,7 +74,11 @@ namespace Rg.Plugins.Popup.IOS.Impl
 
             if (renderer != null && viewController != null && !viewController.IsBeingDismissed)
             {
-                var window = viewController.View.Window;
+                //this fixes bug when popup is not dismissed if app window is covered by ios system notification prompt
+                // ex: "app x would like to send you notifications, allow yes/no"
+                //var window = viewController.View.Window;
+                var window = UIApplication.SharedApplication.KeyWindow;            
+                
                 await window.RootViewController.DismissViewControllerAsync(false);
                 DisposeModelAndChildrenRenderers(page);
                 window.RootViewController.Dispose();
